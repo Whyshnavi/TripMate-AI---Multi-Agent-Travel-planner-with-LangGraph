@@ -25,7 +25,7 @@ AIRPORTS = airportsdata.load("IATA")
 
 
 COUNTRY_ALIASES = {
-    "srilanka":  "SL"
+    "srilanka": "SL",
     "usa": "US",
     "u.s.a": "US",
     "u.s.": "US",
