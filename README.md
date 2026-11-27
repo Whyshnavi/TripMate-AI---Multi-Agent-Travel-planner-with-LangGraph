@@ -13,6 +13,61 @@ Planning a trip usually means jumping between multiple websites, tools, and spre
 
 all coordinated through a LangGraph workflow.
 
+
+## 🏗️ System Architecture
+
+TripMate AI uses a multi-agent architecture powered by LangGraph and LangChain to coordinate different travel planning tasks.
+
+### Architecture Diagram
+
+```mermaid
+flowchart TD
+    A["👤 User"] --> B["FastAPI Backend"]
+
+    B --> C["LangGraph Workflow"]
+
+    C --> D["Flight Agent"]
+    D --> E["Hotel Agent"]
+    E --> F["Itinerary Agent"]
+    F --> G["Final Agent"]
+
+    D --> H["Flight Search Tool"]
+    E --> I["Tavily Web Search"]
+
+    F --> J["Groq LLM"]
+    G --> J
+
+    C -.-> K[("PostgreSQL Checkpointer")]
+
+    C --> L["TravelState"]
+    L --> D
+    L --> E
+    L --> F
+    L --> G
+
+    G --> M["Final Travel Plan"]
+    M --> A
+
+    style C fill:#2563eb,color:#fff
+    style J fill:#7c3aed,color:#fff
+    style K fill:#0d9488,color:#fff
+```
+
+### Workflow Explanation
+
+1. **User Input:** The user submits a travel request through the application.
+2. **FastAPI Backend:** Receives the request and invokes the travel agent workflow.
+3. **Flight Agent:** Retrieves flight information using the flight search tool.
+4. **Hotel Agent:** Searches for hotel information using Tavily.
+5. **Itinerary Agent:** Uses the Groq LLM to generate a travel itinerary.
+6. **Final Agent:** Combines the available information into a final travel response.
+7. **PostgreSQL:** Stores LangGraph workflow checkpoints to support state persistence.
+
+**Workflow Orchestration:** LangGraph  
+**LLM Integration:** LangChain + Groq  
+**Persistence:** PostgreSQL + PostgresSaver
+
+
 ## Features
 
 - ✈️ Flight research using AviationStack
